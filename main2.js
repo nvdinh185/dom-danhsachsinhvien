@@ -72,6 +72,7 @@ students.forEach(function (student) {
     const it = {
         id: student.id,
         studentName: student.name,
+        classId: classInfo.id,
         className: classInfo.name
     }
     listStudents.push(it);
@@ -92,67 +93,135 @@ const htmlTitle = `
 tr1Element.innerHTML = htmlTitle;
 tbElement.appendChild(tr1Element);
 
-// Nội dung
-listStudents.forEach(function (student) {
-    const tr2Element = document.createElement('tr');
+function renderStudent(student) {
+    var trElement = document.createElement('tr');
+    trElement.setAttribute('class', 'student-' + student.id);
 
     const htmlContent = `
         <td>${student.id}</td>
         <td>${student.studentName}</td>
         <td>${student.className}</td>
         <td>
-            <button>Sửa</button>
-            <button>Xóa</button>
+            <button onclick="onUpdate(${student.id}, ${student.classId})">Sửa</button>
+            <button onclick="onDelete(${student.id})">Xóa</button>
         </td>
     `;
 
-    tr2Element.innerHTML = htmlContent;
+    trElement.innerHTML = htmlContent;
+    return trElement;
+}
 
-    tbElement.appendChild(tr2Element);
-
+// Nội dung
+listStudents.forEach(function (student) {
+    var trElement = renderStudent(student);
+    tbElement.appendChild(trElement);
 })
 
-const className = document.querySelector('#class');
+const classElement = document.querySelector('#class');
 
 var htmlOptions = `<option value=''>-- Chọn lớp --</option>`;
-classList.forEach(function (className) {
+classList.forEach(function (classInfo) {
     htmlOptions += `
-        <option value='${className.id}'>${className.name}</option>
+        <option value='${classInfo.id}'>${classInfo.name}</option>
     `;
 })
 
-className.innerHTML = htmlOptions;
+classElement.innerHTML = htmlOptions;
 
-const inputForm = document.forms.myform;
+var addBtnElement = document.getElementById('addBtn');
 
-inputForm.addEventListener('submit', function (e) {
+const stName = document.querySelector('input[name="name"]');
+const classInfo = document.querySelector('select[name="class"]');
+
+addBtnElement.onclick = function (e) {
     e.preventDefault();
-
-    const stName = document.querySelector('input[name="name"]');
-    const className = document.querySelector('select[name="class"]');
 
     const newSt = {
         id: listStudents.length + 1,
         studentName: stName.value,
-        className: getClassNameById([className.value])
+        classId: Number(classInfo.value),
+        className: getClassNameById(classInfo.value)
     }
 
     listStudents.push(newSt);
     stName.value = '';
-    className.value = '';
-    const tr3Element = document.createElement('tr');
-
-    const htmls = `
-        <td>${newSt.id}</td>
-        <td>${newSt.studentName}</td>
-        <td>${newSt.className}</td>
-        <td>
-            <button>Sửa</button>
-            <button>Xóa</button>
-        </td>
-    `;
-
-    tr3Element.innerHTML = htmls;
+    classInfo.value = '';
+    const tr3Element = renderStudent(newSt);
 
     tbElement.appendChild(tr3Element);
-})
+}
+
+function onUpdate(id, classId) {
+    // Tìm sinh viên muốn sửa
+    var student = listStudents.find(function (st) {
+        return st.id === id;
+    })
+
+    stName.value = student.studentName;
+    var arrOptionElement = classElement.getElementsByTagName('option');
+    for (const option of arrOptionElement) {
+        if (Number(option.value) === classId) {
+            option.setAttribute("selected", "selected");
+            classInfo.value = classId;
+        } else {
+            option.removeAttribute("selected");
+        }
+    }
+
+    var editBtnElement = document.createElement('button');
+    editBtnElement.id = 'updateBtn';
+    editBtnElement.innerText = 'Sửa';
+    if (!document.getElementById('updateBtn')) {
+        addBtnElement.parentElement.appendChild(editBtnElement);
+        addBtnElement.remove();
+    }
+
+    editBtnElement.onclick = function (e) {
+        const edSt = {
+            id,
+            studentName: stName.value,
+            classId: Number(classInfo.value),
+            className: getClassNameById(classInfo.value)
+        }
+
+        var idx = listStudents.findIndex(function (student) {
+            return student.id === id;
+        })
+        listStudents.splice(idx, 1, edSt);
+
+        const htmls = `
+            <td>${edSt.id}</td>
+            <td>${edSt.studentName}</td>
+            <td>${edSt.className}</td>
+            <td>
+                <button onclick="onUpdate(${edSt.id}, ${edSt.classId})">Sửa</button>
+                <button onclick="onDelete(${edSt.id})">Xóa</button>
+            </td>
+        `;
+
+        var editElement = document.querySelector('.student-' + id);
+        if (editElement) {
+            editElement.innerHTML = htmls;
+        }
+        editBtnElement.parentElement.appendChild(addBtnElement);
+        editBtnElement.remove();
+        stName.value = '';
+        classInfo.value = '';
+    }
+}
+
+function onDelete(id) {
+    if (confirm("Bạn có chắc muốn xóa?")) {
+        var idx = listStudents.findIndex(function (student) {
+            return student.id === id;
+        })
+
+        if (idx !== -1) {
+            listStudents.splice(idx, 1);
+        }
+        var deleteElement = document.querySelector('.student-' + id);
+        if (deleteElement) {
+            deleteElement.remove();
+        }
+    }
+}
