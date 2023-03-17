@@ -84,11 +84,11 @@ const tbElement = document.querySelector('#tbl');
 const tr1Element = document.createElement('tr');
 
 const htmlTitle = `
-    <th>ID</th>
-    <th>Tên sinh viên</th>
-    <th>Lớp</th>
-    <th>Chức năng</th>
-`;
+        <th>ID</th>
+        <th>Tên sinh viên</th>
+        <th>Lớp</th>
+        <th>Chức năng</th>
+    `;
 
 tr1Element.innerHTML = htmlTitle;
 tbElement.appendChild(tr1Element);
@@ -98,14 +98,14 @@ function renderStudent(student) {
     trElement.setAttribute('class', 'student-' + student.id);
 
     const htmlContent = `
-        <td>${student.id}</td>
-        <td>${student.studentName}</td>
-        <td>${student.className}</td>
-        <td>
-            <button onclick="onUpdate(${student.id}, ${student.classId})">Sửa</button>
-            <button onclick="onDelete(${student.id})">Xóa</button>
-        </td>
-    `;
+            <td>${student.id}</td>
+            <td>${student.studentName}</td>
+            <td>${student.className}</td>
+            <td>
+                <button onclick="onUpdate(${student.id}, ${student.classId})">Sửa</button>
+                <button onclick="onDelete(${student.id})">Xóa</button>
+            </td>
+        `;
 
     trElement.innerHTML = htmlContent;
     return trElement;
@@ -122,8 +122,8 @@ const classElement = document.querySelector('#class');
 var htmlOptions = `<option value=''>-- Chọn lớp --</option>`;
 classList.forEach(function (classInfo) {
     htmlOptions += `
-        <option value='${classInfo.id}'>${classInfo.name}</option>
-    `;
+            <option value='${classInfo.id}'>${classInfo.name}</option>
+        `;
 })
 
 classElement.innerHTML = htmlOptions;
@@ -144,6 +144,7 @@ addBtnElement.onclick = function (e) {
     }
 
     listStudents.push(newSt);
+
     stName.value = '';
     classInfo.value = '';
     const tr3Element = renderStudent(newSt);
@@ -190,14 +191,14 @@ function onUpdate(id, classId) {
         listStudents.splice(idx, 1, edSt);
 
         const htmls = `
-            <td>${edSt.id}</td>
-            <td>${edSt.studentName}</td>
-            <td>${edSt.className}</td>
-            <td>
-                <button onclick="onUpdate(${edSt.id}, ${edSt.classId})">Sửa</button>
-                <button onclick="onDelete(${edSt.id})">Xóa</button>
-            </td>
-        `;
+                <td>${edSt.id}</td>
+                <td>${edSt.studentName}</td>
+                <td>${edSt.className}</td>
+                <td>
+                    <button onclick="onUpdate(${edSt.id}, ${edSt.classId})">Sửa</button>
+                    <button onclick="onDelete(${edSt.id})">Xóa</button>
+                </td>
+            `;
 
         var editElement = document.querySelector('.student-' + id);
         if (editElement) {
