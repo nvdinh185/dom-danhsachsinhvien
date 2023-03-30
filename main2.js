@@ -159,15 +159,7 @@ function onUpdate(id, classId) {
     })
 
     stName.value = student.studentName;
-    var arrOptionElement = classElement.getElementsByTagName('option');
-    for (const option of arrOptionElement) {
-        if (Number(option.value) === classId) {
-            option.setAttribute("selected", "selected");
-            classInfo.value = classId;
-        } else {
-            option.removeAttribute("selected");
-        }
-    }
+    classInfo.value = classId;
 
     var editBtnElement = document.createElement('button');
     editBtnElement.id = 'updateBtn';
