@@ -78,10 +78,10 @@ students.forEach(function (student) {
     listStudents.push(it);
 })
 
-const tbElement = document.querySelector('#tbl');
+const tbElement = $('#tbl');
 
 // Tiêu đề
-const tr1Element = document.createElement('tr');
+const tr1Element = $('<tr></tr>');
 
 const htmlTitle = `
         <th>ID</th>
@@ -90,12 +90,12 @@ const htmlTitle = `
         <th>Chức năng</th>
     `;
 
-tr1Element.innerHTML = htmlTitle;
-tbElement.appendChild(tr1Element);
+tr1Element.html(htmlTitle);
+tbElement.append(tr1Element);
 
 function renderStudent(student) {
-    var trElement = document.createElement('tr');
-    trElement.setAttribute('class', 'student-' + student.id);
+    var trElement = $('<tr></tr>');
+    $(trElement).attr('class', 'student-' + student.id);
 
     const htmlContent = `
             <td>${student.id}</td>
@@ -107,17 +107,17 @@ function renderStudent(student) {
             </td>
         `;
 
-    trElement.innerHTML = htmlContent;
+    trElement.html(htmlContent);
     return trElement;
 }
 
-// Nội dung
+// // Nội dung
 listStudents.forEach(function (student) {
     var trElement = renderStudent(student);
-    tbElement.appendChild(trElement);
+    tbElement.append(trElement);
 })
 
-const classElement = document.querySelector('#class');
+const classElement = $('#class');
 
 var htmlOptions = `<option value=''>-- Chọn lớp --</option>`;
 classList.forEach(function (classInfo) {
@@ -126,31 +126,31 @@ classList.forEach(function (classInfo) {
         `;
 })
 
-classElement.innerHTML = htmlOptions;
+classElement.html(htmlOptions);
 
-var addBtnElement = document.getElementById('addBtn');
+var addBtnElement = $('#addBtn');
 
-const stName = document.querySelector('input[name="name"]');
-const classInfo = document.querySelector('select[name="class"]');
+const stName = $('input[name="name"]');
+const classInfo = $('select[name="class"]');
 
-addBtnElement.onclick = function (e) {
+addBtnElement.click(function (e) {
     e.preventDefault();
 
     const newSt = {
         id: listStudents.length + 1,
-        studentName: stName.value,
-        classId: Number(classInfo.value),
-        className: getClassNameById(classInfo.value)
+        studentName: stName.val(),
+        classId: Number(classInfo.val()),
+        className: getClassNameById(classInfo.val())
     }
 
     listStudents.push(newSt);
 
-    stName.value = '';
-    classInfo.value = '';
+    stName.val('');
+    classInfo.val('');
     const tr3Element = renderStudent(newSt);
 
-    tbElement.appendChild(tr3Element);
-}
+    tbElement.append(tr3Element);
+})
 
 function onUpdate(id, classId) {
     // Tìm sinh viên muốn sửa
@@ -158,23 +158,20 @@ function onUpdate(id, classId) {
         return st.id === id;
     })
 
-    stName.value = student.studentName;
-    classInfo.value = classId;
+    stName.val(student.studentName);
+    classInfo.val(classId);
 
-    var editBtnElement = document.createElement('button');
-    editBtnElement.id = 'updateBtn';
-    editBtnElement.innerText = 'Sửa';
-    if (!document.getElementById('updateBtn')) {
-        addBtnElement.parentElement.appendChild(editBtnElement);
-        addBtnElement.remove();
-    }
+    var edBtnElement = $("#edBtn");
+    $(edBtnElement).attr('style', 'display: block;');
+    $(addBtnElement).attr('style', 'display: none');
 
-    editBtnElement.onclick = function (e) {
+    edBtnElement.click(function (e) {
+        e.preventDefault();
         const edSt = {
             id,
-            studentName: stName.value,
-            classId: Number(classInfo.value),
-            className: getClassNameById(classInfo.value)
+            studentName: stName.val(),
+            classId: Number(classInfo.val()),
+            className: getClassNameById(classInfo.val())
         }
 
         var idx = listStudents.findIndex(function (student) {
@@ -192,15 +189,15 @@ function onUpdate(id, classId) {
                 </td>
             `;
 
-        var editElement = document.querySelector('.student-' + id);
+        var editElement = $('.student-' + id);
         if (editElement) {
-            editElement.innerHTML = htmls;
+            editElement.html(htmls);
         }
-        editBtnElement.parentElement.appendChild(addBtnElement);
-        editBtnElement.remove();
-        stName.value = '';
-        classInfo.value = '';
-    }
+        $(edBtnElement).attr('style', 'display: none');
+        $(addBtnElement).attr('style', 'display: block;');
+        stName.val('');
+        classInfo.val('');
+    })
 }
 
 function onDelete(id) {
@@ -212,7 +209,7 @@ function onDelete(id) {
         if (idx !== -1) {
             listStudents.splice(idx, 1);
         }
-        var deleteElement = document.querySelector('.student-' + id);
+        var deleteElement = $('.student-' + id);
         if (deleteElement) {
             deleteElement.remove();
         }
