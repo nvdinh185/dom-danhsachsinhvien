@@ -1,26 +1,26 @@
 const students = [
     {
-        id: 1,
+        id: '1',
         name: 'Nguyen Van Teo',
         classId: 1
     },
     {
-        id: 2,
+        id: '2',
         name: 'Nguyen Van Ti',
         classId: 2
     },
     {
-        id: 3,
+        id: '3',
         name: 'Tran Van Tun',
         classId: 3
     },
     {
-        id: 4,
+        id: '4',
         name: 'Nguyen Thi Heo',
         classId: 1
     },
     {
-        id: 5,
+        id: '5',
         name: 'Le Thi Be',
         classId: 1
     }
@@ -57,6 +57,13 @@ function getClassNameById(id) {
     }).name;
 }
 
+function generateUuid() {
+    return 'xxxx-xxxx-xxx-xxxx'.replace(/[x]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
 const classIds = students.map(function (student) {
     return student.classId;
 })
@@ -81,7 +88,7 @@ students.forEach(function (student) {
 const tbElement = $('#tbl');
 
 // Tiêu đề
-const tr1Element = $('<tr></tr>');
+const trElement = $('<tr></tr>');
 
 const htmlTitle = `
         <th>ID</th>
@@ -90,8 +97,8 @@ const htmlTitle = `
         <th>Chức năng</th>
     `;
 
-tr1Element.html(htmlTitle);
-tbElement.append(tr1Element);
+trElement.html(htmlTitle);
+tbElement.append(trElement);
 
 function renderStudent(student) {
     var trElement = $('<tr></tr>');
@@ -102,8 +109,8 @@ function renderStudent(student) {
             <td>${student.studentName}</td>
             <td>${student.className}</td>
             <td>
-                <button onclick="onUpdate(${student.id}, ${student.classId})">Sửa</button>
-                <button onclick="onDelete(${student.id})">Xóa</button>
+                <button onclick="onUpdate('${student.id}', ${student.classId})">Sửa</button>
+                <button onclick="onDelete('${student.id}')">Xóa</button>
             </td>
         `;
 
@@ -129,6 +136,7 @@ classList.forEach(function (classInfo) {
 classElement.html(htmlOptions);
 
 var addBtnElement = $('#addBtn');
+var edBtnElement = $("#edBtn");
 
 const stName = $('input[name="name"]');
 const classInfo = $('select[name="class"]');
@@ -137,7 +145,7 @@ addBtnElement.click(function (e) {
     e.preventDefault();
 
     const newSt = {
-        id: listStudents.length + 1,
+        id: generateUuid(),
         studentName: stName.val(),
         classId: Number(classInfo.val()),
         className: getClassNameById(classInfo.val())
@@ -147,58 +155,51 @@ addBtnElement.click(function (e) {
 
     stName.val('');
     classInfo.val('');
-    const tr3Element = renderStudent(newSt);
+    const trElement = renderStudent(newSt);
 
-    tbElement.append(tr3Element);
+    tbElement.append(trElement);
 })
 
+var edId;
 function onUpdate(id, classId) {
+    edId = id;
     // Tìm sinh viên muốn sửa
     var student = listStudents.find(function (st) {
-        return st.id === id;
+        return st.id === edId;
     })
 
     stName.val(student.studentName);
     classInfo.val(classId);
 
-    var edBtnElement = $("#edBtn");
     $(edBtnElement).attr('style', 'display: block;');
     $(addBtnElement).attr('style', 'display: none');
-
-    edBtnElement.click(function (e) {
-        e.preventDefault();
-        const edSt = {
-            id,
-            studentName: stName.val(),
-            classId: Number(classInfo.val()),
-            className: getClassNameById(classInfo.val())
-        }
-
-        var idx = listStudents.findIndex(function (student) {
-            return student.id === id;
-        })
-        listStudents.splice(idx, 1, edSt);
-
-        const htmls = `
-                <td>${edSt.id}</td>
-                <td>${edSt.studentName}</td>
-                <td>${edSt.className}</td>
-                <td>
-                    <button onclick="onUpdate(${edSt.id}, ${edSt.classId})">Sửa</button>
-                    <button onclick="onDelete(${edSt.id})">Xóa</button>
-                </td>
-            `;
-
-        var editElement = $('.student-' + id);
-        if (editElement) {
-            editElement.html(htmls);
-        }
-        $(edBtnElement).attr('style', 'display: none');
-        $(addBtnElement).attr('style', 'display: block;');
-        stName.val('');
-        classInfo.val('');
-    })
 }
+
+edBtnElement.click(function (e) {
+    e.preventDefault();
+    const edSt = {
+        id: edId,
+        studentName: stName.val(),
+        classId: Number(classInfo.val()),
+        className: getClassNameById(classInfo.val())
+    }
+
+    var idx = listStudents.findIndex(function (student) {
+        return student.id === edId;
+    })
+    listStudents.splice(idx, 1, edSt);
+
+    const trElement = renderStudent(edSt);
+
+    var editElement = $('.student-' + edId);
+    if (editElement) {
+        editElement.replaceWith(trElement);
+    }
+    stName.val('');
+    classInfo.val('');
+    $(edBtnElement).attr('style', 'display: none');
+    $(addBtnElement).attr('style', 'display: block;');
+})
 
 function onDelete(id) {
     if (confirm("Bạn có chắc muốn xóa?")) {
@@ -208,10 +209,10 @@ function onDelete(id) {
 
         if (idx !== -1) {
             listStudents.splice(idx, 1);
-        }
-        var deleteElement = $('.student-' + id);
-        if (deleteElement) {
-            deleteElement.remove();
+            var deleteElement = $('.student-' + id);
+            if (deleteElement) {
+                deleteElement.remove();
+            }
         }
     }
 }
