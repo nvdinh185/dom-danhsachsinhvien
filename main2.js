@@ -45,18 +45,6 @@ const classList = [
     }
 ]
 
-function getClassByIds(classIds) {
-    return classList.filter(function (el) {
-        return classIds.includes(el.id);
-    })
-}
-
-function getClassNameById(id) {
-    return classList.find(function (el) {
-        return el.id === Number(id);
-    }).name;
-}
-
 function generateUuid() {
     return 'xxxx-xxxx-xxx-xxxx'.replace(/[x]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -64,16 +52,9 @@ function generateUuid() {
     });
 }
 
-const classIds = students.map(function (student) {
-    return student.classId;
-})
-
-const classByIds = getClassByIds(classIds);
-// console.log(classByIds);
-
 const listStudents = [];
 students.forEach(function (student) {
-    const classInfo = classByIds.find(function (el) {
+    const classInfo = classList.find(function (el) {
         return el.id === student.classId;
     })
     const it = {
@@ -128,9 +109,7 @@ const classElement = $('#class');
 
 var htmlOptions = `<option value=''>-- Chọn lớp --</option>`;
 classList.forEach(function (classInfo) {
-    htmlOptions += `
-            <option value='${classInfo.id}'>${classInfo.name}</option>
-        `;
+    htmlOptions += `<option value='${classInfo.id}'>${classInfo.name}</option>`;
 })
 
 classElement.html(htmlOptions);
