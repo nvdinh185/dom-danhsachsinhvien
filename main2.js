@@ -45,6 +45,12 @@ const classList = [
     }
 ]
 
+function getClassNameById(id) {
+    return classList.find(function (el) {
+        return el.id === Number(id);
+    }).name;
+}
+
 function generateUuid() {
     return 'xxxx-xxxx-xxx-xxxx'.replace(/[x]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
