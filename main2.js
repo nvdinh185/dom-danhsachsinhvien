@@ -99,7 +99,7 @@ function renderStudent(student) {
     return trElement;
 }
 
-// // Nội dung
+// Nội dung
 listStudents.forEach(function (student) {
     var trElement = renderStudent(student);
     tbElement.append(trElement);
