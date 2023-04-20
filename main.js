@@ -1,46 +1,46 @@
 const students = [
     {
-        id: 1,
+        id: '1',
         name: 'Nguyen Van Teo',
-        classId: 1
+        classId: '1'
     },
     {
-        id: 2,
+        id: '2',
         name: 'Nguyen Van Ti',
-        classId: 2
+        classId: '2'
     },
     {
-        id: 3,
+        id: '3',
         name: 'Tran Van Tun',
-        classId: 3
+        classId: '3'
     },
     {
-        id: 4,
+        id: '4',
         name: 'Nguyen Thi Heo',
-        classId: 1
+        classId: '1'
     },
     {
-        id: 5,
+        id: '5',
         name: 'Le Thi Be',
-        classId: 1
+        classId: '1'
     }
 ]
 
 const classList = [
     {
-        id: 1,
+        id: '1',
         name: "CNTT"
     },
     {
-        id: 2,
+        id: '2',
         name: 'DTVT'
     },
     {
-        id: 3,
+        id: '3',
         name: 'THXD'
     },
     {
-        id: 4,
+        id: '4',
         name: 'XDDD'
     }
 ]
@@ -53,7 +53,7 @@ function getClassByIds(classIds) {
 
 function getClassNameById(id) {
     return classList.find(function (el) {
-        return el.id === Number(id);
+        return el.id === id;
     }).name;
 }
 
@@ -69,13 +69,13 @@ students.forEach(function (student) {
     const classInfo = classByIds.find(function (el) {
         return el.id === student.classId;
     })
-    const it = {
+    const newSt = {
         id: student.id,
         studentName: student.name,
         classId: classInfo.id,
         className: classInfo.name
     }
-    listStudents.push(it);
+    listStudents.push(newSt);
 })
 
 const tbElement = document.querySelector('#tbl');
@@ -84,7 +84,6 @@ const tbElement = document.querySelector('#tbl');
 const tr1Element = document.createElement('tr');
 
 const htmlTitle = `
-        <th>ID</th>
         <th>Tên sinh viên</th>
         <th>Lớp</th>
         <th>Chức năng</th>
@@ -98,12 +97,11 @@ function renderStudent(student) {
     trElement.setAttribute('class', 'student-' + student.id);
 
     const htmlContent = `
-            <td>${student.id}</td>
             <td>${student.studentName}</td>
             <td>${student.className}</td>
             <td>
-                <button onclick="onUpdate(${student.id}, ${student.classId})">Sửa</button>
-                <button onclick="onDelete(${student.id})">Xóa</button>
+                <button onclick="onUpdate('${student.id}', '${student.classId}')">Sửa</button>
+                <button onclick="onDelete('${student.id}')">Xóa</button>
             </td>
         `;
 
@@ -128,16 +126,24 @@ classList.forEach(function (classInfo) {
 
 classElement.innerHTML = htmlOptions;
 
-var addBtnElement = document.getElementById('addBtn');
+var addBtnElement = document.getElementById('create');
+var editBtnElement = document.getElementById('update');
 
 const stName = document.querySelector('input[name="name"]');
 const classInfo = document.querySelector('select[name="class"]');
+
+function generateUuid() {
+    return 'xxxx-xxxx-xxx-xxxx'.replace(/[x]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
 
 addBtnElement.onclick = function (e) {
     e.preventDefault();
 
     const newSt = {
-        id: listStudents.length + 1,
+        id: generateUuid(),
         studentName: stName.value,
         classId: Number(classInfo.value),
         className: getClassNameById(classInfo.value)
@@ -152,55 +158,52 @@ addBtnElement.onclick = function (e) {
     tbElement.appendChild(tr3Element);
 }
 
+var idEd;
 function onUpdate(id, classId) {
+    idEd = id;
     // Tìm sinh viên muốn sửa
     var student = listStudents.find(function (st) {
-        return st.id === id;
+        return st.id === idEd;
     })
 
     stName.value = student.studentName;
     classInfo.value = classId;
 
-    var editBtnElement = document.createElement('button');
-    editBtnElement.id = 'updateBtn';
-    editBtnElement.innerText = 'Sửa';
-    if (!document.getElementById('updateBtn')) {
-        addBtnElement.parentElement.appendChild(editBtnElement);
-        addBtnElement.remove();
+    addBtnElement.setAttribute('style', 'display: none');
+    editBtnElement.setAttribute('style', 'display: block');
+}
+
+editBtnElement.onclick = function (e) {
+    e.preventDefault();
+    const edSt = {
+        id: idEd,
+        studentName: stName.value,
+        classId: Number(classInfo.value),
+        className: getClassNameById(classInfo.value)
     }
 
-    editBtnElement.onclick = function (e) {
-        const edSt = {
-            id,
-            studentName: stName.value,
-            classId: Number(classInfo.value),
-            className: getClassNameById(classInfo.value)
-        }
+    var idx = listStudents.findIndex(function (student) {
+        return student.id === idEd;
+    })
+    listStudents.splice(idx, 1, edSt);
 
-        var idx = listStudents.findIndex(function (student) {
-            return student.id === id;
-        })
-        listStudents.splice(idx, 1, edSt);
-
-        const htmls = `
-                <td>${edSt.id}</td>
+    const htmls = `
                 <td>${edSt.studentName}</td>
                 <td>${edSt.className}</td>
                 <td>
-                    <button onclick="onUpdate(${edSt.id}, ${edSt.classId})">Sửa</button>
-                    <button onclick="onDelete(${edSt.id})">Xóa</button>
+                    <button onclick="onUpdate('${edSt.id}', '${edSt.classId}')">Sửa</button>
+                    <button onclick="onDelete('${edSt.id}')">Xóa</button>
                 </td>
             `;
 
-        var editElement = document.querySelector('.student-' + id);
-        if (editElement) {
-            editElement.innerHTML = htmls;
-        }
-        editBtnElement.parentElement.appendChild(addBtnElement);
-        editBtnElement.remove();
-        stName.value = '';
-        classInfo.value = '';
+    var editElement = document.querySelector('.student-' + idEd);
+    if (editElement) {
+        editElement.innerHTML = htmls;
     }
+    addBtnElement.setAttribute('style', 'display: block');
+    editBtnElement.setAttribute('style', 'display: none');
+    stName.value = '';
+    classInfo.value = '';
 }
 
 function onDelete(id) {
