@@ -139,23 +139,65 @@ function generateUuid() {
     });
 }
 
+function handleBlurInput(input) {
+    var errorElement = input.parentElement.querySelector('.form-message');
+    input.onblur = function () {
+        if (input.value === '') {
+            errorElement.setAttribute('style', 'display: block; color: red; font-style: italic;');
+            errorElement.innerText = 'Yêu cầu nhập!';
+        } else {
+            errorElement.setAttribute('style', 'display: none;');
+        }
+    }
+}
+
+
+handleBlurInput(stName);
+handleBlurInput(classInfo);
+
 addBtnElement.onclick = function (e) {
     e.preventDefault();
 
-    const newSt = {
-        id: generateUuid(),
-        studentName: stName.value,
-        classId: Number(classInfo.value),
-        className: getClassNameById(classInfo.value)
+    var check = true;
+    if (validation(stName)) {
+        check = false;
+    }
+    if (validation(classInfo)) {
+        check = false;
+    }
+    if (check) {
+
+        const newSt = {
+            id: generateUuid(),
+            studentName: stName.value,
+            classId: Number(classInfo.value),
+            className: getClassNameById(classInfo.value)
+        }
+
+        listStudents.push(newSt);
+
+        stName.value = '';
+        classInfo.value = '';
+        const tr3Element = renderStudent(newSt);
+
+        tbElement.appendChild(tr3Element);
     }
 
-    listStudents.push(newSt);
-
-    stName.value = '';
-    classInfo.value = '';
-    const tr3Element = renderStudent(newSt);
-
-    tbElement.appendChild(tr3Element);
+    function validation(input) {
+        var errorElement = input.parentElement.querySelector('.form-message');
+        if (input.value === '') {
+            Object.assign(errorElement.style, {
+                display: 'block',
+                color: 'red',
+                fontStyle: 'italic'
+            })
+            errorElement.innerText = 'Yêu cầu nhập!';
+            return true;
+        } else {
+            errorElement.setAttribute('style', 'display: none;');
+            return false;
+        }
+    }
 }
 
 var idEd;
