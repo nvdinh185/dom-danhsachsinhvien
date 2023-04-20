@@ -2,52 +2,52 @@ const students = [
     {
         id: '1',
         name: 'Nguyen Van Teo',
-        classId: 1
+        classId: '1'
     },
     {
         id: '2',
         name: 'Nguyen Van Ti',
-        classId: 2
+        classId: '2'
     },
     {
         id: '3',
         name: 'Tran Van Tun',
-        classId: 3
+        classId: '3'
     },
     {
         id: '4',
         name: 'Nguyen Thi Heo',
-        classId: 1
+        classId: '1'
     },
     {
         id: '5',
         name: 'Le Thi Be',
-        classId: 1
+        classId: '1'
     }
 ]
 
 const classList = [
     {
-        id: 1,
+        id: '1',
         name: "CNTT"
     },
     {
-        id: 2,
+        id: '2',
         name: 'DTVT'
     },
     {
-        id: 3,
+        id: '3',
         name: 'THXD'
     },
     {
-        id: 4,
+        id: '4',
         name: 'XDDD'
     }
 ]
 
 function getClassNameById(id) {
     return classList.find(function (el) {
-        return el.id === Number(id);
+        return el.id === id;
     }).name;
 }
 
@@ -63,13 +63,13 @@ students.forEach(function (student) {
     const classInfo = classList.find(function (el) {
         return el.id === student.classId;
     })
-    const it = {
+    const newSt = {
         id: student.id,
         studentName: student.name,
         classId: classInfo.id,
         className: classInfo.name
     }
-    listStudents.push(it);
+    listStudents.push(newSt);
 })
 
 const tbElement = $('#tbl');
@@ -78,7 +78,6 @@ const tbElement = $('#tbl');
 const trElement = $('<tr></tr>');
 
 const htmlTitle = `
-        <th>ID</th>
         <th>Tên sinh viên</th>
         <th>Lớp</th>
         <th>Chức năng</th>
@@ -92,11 +91,10 @@ function renderStudent(student) {
     $(trElement).attr('class', 'student-' + student.id);
 
     const htmlContent = `
-            <td>${student.id}</td>
             <td>${student.studentName}</td>
             <td>${student.className}</td>
             <td>
-                <button onclick="onUpdate('${student.id}', ${student.classId})">Sửa</button>
+                <button onclick="onUpdate('${student.id}', '${student.classId}')">Sửa</button>
                 <button onclick="onDelete('${student.id}')">Xóa</button>
             </td>
         `;
@@ -120,29 +118,68 @@ classList.forEach(function (classInfo) {
 
 classElement.html(htmlOptions);
 
-var addBtnElement = $('#addBtn');
-var edBtnElement = $("#edBtn");
+var addBtnElement = $('#create');
+var edBtnElement = $("#update");
 
 const stName = $('input[name="name"]');
 const classInfo = $('select[name="class"]');
 
+function handleBlurInput(input) {
+    var errorElement = input.parent().children()[3];
+    input.blur(function () {
+        if (input.val() === '') {
+            $(errorElement).attr('style', 'display: block; color: red; font-style: italic;');
+            $(errorElement).text('Yêu cầu nhập!');
+        } else {
+            $(errorElement).attr('style', 'display: none;');
+        }
+    })
+}
+
+handleBlurInput(stName);
+handleBlurInput(classInfo);
+
 addBtnElement.click(function (e) {
     e.preventDefault();
 
-    const newSt = {
-        id: generateUuid(),
-        studentName: stName.val(),
-        classId: Number(classInfo.val()),
-        className: getClassNameById(classInfo.val())
+    var check = true;
+    if (validation(stName)) {
+        check = false;
     }
+    if (validation(classInfo)) {
+        check = false;
+    }
+    if (check) {
+        const newSt = {
+            id: generateUuid(),
+            studentName: stName.val(),
+            classId: classInfo.val(),
+            className: getClassNameById(classInfo.val())
+        }
 
-    listStudents.push(newSt);
+        listStudents.push(newSt);
 
-    stName.val('');
-    classInfo.val('');
-    const trElement = renderStudent(newSt);
+        stName.val('');
+        classInfo.val('');
+        const trElement = renderStudent(newSt);
 
-    tbElement.append(trElement);
+        tbElement.append(trElement);
+    }
+    function validation(input) {
+        var errorElement = input.parent().children()[3];
+        if (input.val() === '') {
+            Object.assign(errorElement.style, {
+                display: 'block',
+                color: 'red',
+                fontStyle: 'italic'
+            })
+            $(errorElement).text('Yêu cầu nhập!');
+            return true;
+        } else {
+            $(errorElement).attr('style', 'display: none;');
+            return false;
+        }
+    }
 })
 
 var edId;
@@ -165,7 +202,7 @@ edBtnElement.click(function (e) {
     const edSt = {
         id: edId,
         studentName: stName.val(),
-        classId: Number(classInfo.val()),
+        classId: classInfo.val(),
         className: getClassNameById(classInfo.val())
     }
 

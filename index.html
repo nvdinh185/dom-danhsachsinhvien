@@ -12,19 +12,26 @@
     <h1>Danh sách sinh viên</h1>
     <table id="tbl" border="1px" style="width: 500px"></table>
     <br /><br />
-    <form id="myform">
-        <label for="name">Tên sinh viên</label>
-        <input type="text" id="name" name="name" placeholder="Nhập tên sinh viên"><br /><br />
-        <label for="class">Lớp</label>
-        <select name="class" id="class"></select><br /><br />
+    <form>
         <div>
-            <button id="addBtn">Thêm</button>
-            <button id="edBtn" style="display: none;">Sửa</button>
+            <label>Tên sinh viên</label>
+            <input type="text" name="name" placeholder="Nhập tên sinh viên"><br />
+            <span></span>
+        </div>
+        <br />
+        <div>
+            <label>Lớp</label>
+            <select name="class" id="class"></select><br />
+            <span></span>
+        </div>
+        <div>
+            <button id="create">Thêm</button>
+            <button style="display: none;" id="update">Sửa</button>
         </div>
     </form>
 
     <script src="lib/jquery-3.6.3.min.js"></script>
-    <script src="main2.js"></script>
+    <script src="main.js"></script>
 </body>
 
 </html>
