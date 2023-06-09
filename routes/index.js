@@ -1,9 +1,9 @@
-const studentsRoute = require('./students');
-const classesRoute = require('./classes');
+const studentRouter = require('./student');
+const classRouter = require('./class');
 
 function route(app) {
-    app.use('/students', studentsRoute);
-    app.use('/classes', classesRoute);
+    app.use('/student', studentRouter);
+    app.use('/class', classRouter);
 }
 
 module.exports = route;

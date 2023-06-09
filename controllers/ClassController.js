@@ -9,18 +9,18 @@ const configDB = {
 
 class ClassController {
 
-    // [GET] /classes
-    async getClasses(req, res) {
+    // [GET] /class
+    async getListClass(req, res) {
         try {
             var conn = mysql.createConnection(configDB);
 
-            const listStudents = await new Promise((resolve, reject) => {
+            const listClass = await new Promise((resolve, reject) => {
                 conn.query(`SELECT * from class_info`, (err, row) => {
                     if (err) reject(err);
                     resolve(row);
                 })
             })
-            res.status(200).send(listStudents);
+            res.status(200).send(listClass);
         } catch (err) {
             res.status(500).send(err);
         } finally {

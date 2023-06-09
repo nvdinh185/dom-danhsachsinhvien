@@ -1,5 +1,5 @@
-const studentsApi = "http://localhost:3000/students";
-const classApi = "http://localhost:3000/classes";
+const studentsApi = "http://localhost:3000/student";
+const classApi = "http://localhost:3000/class";
 
 async function getData() {
     var listStudents = await axios.get(studentsApi);

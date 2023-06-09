@@ -3,7 +3,7 @@ const router = express.Router();
 
 const classController = require('../controllers/ClassController');
 
-router.get("/", classController.getClasses);
+router.get("/", classController.getListClass);
 
 
 module.exports = router;

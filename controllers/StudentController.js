@@ -9,8 +9,8 @@ const configDB = {
 
 class StudentController {
 
-    // [GET] /students
-    async getStudents(req, res) {
+    // [GET] /student
+    async getListStudents(req, res) {
         try {
             var conn = mysql.createConnection(configDB);
 
@@ -29,7 +29,7 @@ class StudentController {
         }
     }
 
-    // [GET] /students/:id
+    // [GET] /student/:id
     async getAStudent(req, res) {
         try {
             var conn = mysql.createConnection(configDB);
@@ -50,7 +50,7 @@ class StudentController {
         }
     }
 
-    // [POST] /students/add
+    // [POST] /student/add
     async createStudent(req, res) {
         const { id, name, classId } = req.body;
         try {
@@ -72,7 +72,7 @@ class StudentController {
         }
     }
 
-    // [DELETE] /students/:id
+    // [DELETE] /student/:id
     async deleteStudent(req, res) {
         try {
             var conn = mysql.createConnection(configDB);
@@ -93,7 +93,7 @@ class StudentController {
         }
     }
 
-    // [PUT] /students/:id
+    // [PUT] /student/:id
     async updateStudent(req, res) {
         try {
             var conn = mysql.createConnection(configDB);
