@@ -1,5 +1,6 @@
 const studentsApi = "http://localhost:3000/student";
 const classApi = "http://localhost:3000/class";
+const tbElement = $('#tbl');
 
 async function getData() {
     var listStudents = await axios.get(studentsApi);
@@ -14,7 +15,6 @@ async function getData() {
     <th>Chức năng</th>
     `;
 
-    const tbElement = $('#tbl');
     trElement.html(htmlTitle);
     tbElement.html(trElement);
 
@@ -97,13 +97,18 @@ addBtnElement.click(async function (e) {
         await axios({
             method: "POST",
             url: studentsApi + '/add',
-            data: JSON.stringify(newSt),
+            data: newSt,
             headers: { "Content-Type": "application/json" },
         })
 
         stName.val('');
         classInfo.val('');
-        getData();
+        // Lấy sinh viên mới thêm vào
+        var student = await axios.get(studentsApi + '/' + newSt.id);
+        student = student.data;
+        var trElement = renderStudent(student);
+        tbElement.append(trElement);
+
     }
     function validation(input) {
         var errorElement = input.parent().children()[3];
@@ -154,11 +159,19 @@ edBtnElement.click(async function (e) {
     await axios({
         method: "PUT",
         url: studentsApi + '/' + edId,
-        data: JSON.stringify(edSt),
+        data: edSt,
         headers: { "Content-Type": "application/json" },
     })
 
-    getData();
+    // Lấy sinh viên mới sửa
+    var student = await axios.get(studentsApi + '/' + edId);
+    student = student.data;
+    var trElement = renderStudent(student);
+    var studentElement = $('.student-' + edId);
+    if (studentElement) {
+        studentElement.replaceWith(trElement);
+    }
+
     stName.val('');
     classInfo.val('');
     $(edBtnElement).attr('style', 'display: none');
@@ -174,6 +187,9 @@ async function onDelete(id) {
             headers: { "Content-Type": "application/json" }
         })
 
-        getData();
+        var studentElement = $('.student-' + id);
+        if (studentElement) {
+            studentElement.remove();
+        }
     }
 }
