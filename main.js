@@ -94,7 +94,7 @@ function renderStudent(student) {
             <td>${student.studentName}</td>
             <td>${student.className}</td>
             <td>
-                <button onclick="onUpdate('${student.id}', '${student.classId}')">Sửa</button>
+                <button onclick="onUpdate('${student.id}')">Sửa</button>
                 <button onclick="onDelete('${student.id}')">Xóa</button>
             </td>
         `;
@@ -183,7 +183,7 @@ addBtnElement.click(function (e) {
 })
 
 var edId;
-function onUpdate(id, classId) {
+function onUpdate(id) {
     edId = id;
     // Tìm sinh viên muốn sửa
     var student = listStudents.find(function (st) {
@@ -191,7 +191,7 @@ function onUpdate(id, classId) {
     })
 
     stName.val(student.studentName);
-    classInfo.val(classId);
+    classInfo.val(student.classId);
 
     $(edBtnElement).attr('style', 'display: block;');
     $(addBtnElement).attr('style', 'display: none');
