@@ -15,7 +15,7 @@ class StudentController {
             var conn = mysql.createConnection(configDB);
 
             const listStudents = await new Promise((resolve, reject) => {
-                conn.query(`SELECT st.id, st.name, st.class_id as classId, cl.name as className
+                conn.query(`SELECT st.id, st.name, cl.name as className
                 FROM students as st JOIN class_info as cl ON st.class_id = cl.id;`, (err, row) => {
                     if (err) reject(err);
                     resolve(row);
@@ -30,7 +30,7 @@ class StudentController {
     }
 
     // [GET] /student/:id
-    async getAStudent(req, res) {
+    async getStudentById(req, res) {
         try {
             var conn = mysql.createConnection(configDB);
 
