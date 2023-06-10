@@ -81,16 +81,18 @@ students.forEach(function (student) {
 const tbElement = document.querySelector('#tbl');
 
 // Tiêu đề
-const tr1Element = document.createElement('tr');
+const theadElement = document.createElement('thead');
 
 const htmlTitle = `
-        <th>Tên sinh viên</th>
-        <th>Lớp</th>
-        <th>Chức năng</th>
+        <tr>
+            <th>Tên sinh viên</th>
+            <th>Lớp</th>
+            <th>Chức năng</th>
+        </tr>
     `;
 
-tr1Element.innerHTML = htmlTitle;
-tbElement.appendChild(tr1Element);
+theadElement.innerHTML = htmlTitle;
+tbElement.appendChild(theadElement);
 
 function renderStudent(student) {
     var trElement = document.createElement('tr');
@@ -100,7 +102,7 @@ function renderStudent(student) {
             <td>${student.studentName}</td>
             <td>${student.className}</td>
             <td>
-                <button onclick="onUpdate('${student.id}', '${student.classId}')">Sửa</button>
+                <button onclick="onUpdate('${student.id}')">Sửa</button>
                 <button onclick="onDelete('${student.id}')">Xóa</button>
             </td>
         `;
@@ -110,10 +112,12 @@ function renderStudent(student) {
 }
 
 // Nội dung
+const tbodyElement = document.createElement('tbody');
 listStudents.forEach(function (student) {
     var trElement = renderStudent(student);
-    tbElement.appendChild(trElement);
+    tbodyElement.appendChild(trElement);
 })
+tbElement.appendChild(tbodyElement);
 
 const classElement = document.querySelector('#class');
 
@@ -180,7 +184,7 @@ addBtnElement.onclick = function (e) {
         classInfo.value = '';
         const tr3Element = renderStudent(newSt);
 
-        tbElement.appendChild(tr3Element);
+        tbodyElement.appendChild(tr3Element);
     }
 
     function validation(input) {
@@ -201,7 +205,7 @@ addBtnElement.onclick = function (e) {
 }
 
 var idEd;
-function onUpdate(id, classId) {
+function onUpdate(id) {
     idEd = id;
     // Tìm sinh viên muốn sửa
     var student = listStudents.find(function (st) {
@@ -209,7 +213,7 @@ function onUpdate(id, classId) {
     })
 
     stName.value = student.studentName;
-    classInfo.value = classId;
+    classInfo.value = student.classId;
 
     addBtnElement.setAttribute('style', 'display: none');
     editBtnElement.setAttribute('style', 'display: block');
@@ -229,18 +233,12 @@ editBtnElement.onclick = function (e) {
     })
     listStudents.splice(idx, 1, edSt);
 
-    const htmls = `
-                <td>${edSt.studentName}</td>
-                <td>${edSt.className}</td>
-                <td>
-                    <button onclick="onUpdate('${edSt.id}', '${edSt.classId}')">Sửa</button>
-                    <button onclick="onDelete('${edSt.id}')">Xóa</button>
-                </td>
-            `;
+    const trElement = renderStudent(edSt);
+    var htmls = trElement.outerHTML;// chuyển từ element sang string
 
     var editElement = document.querySelector('.student-' + idEd);
     if (editElement) {
-        editElement.innerHTML = htmls;
+        editElement.outerHTML = htmls;
     }
     addBtnElement.setAttribute('style', 'display: block');
     editBtnElement.setAttribute('style', 'display: none');
