@@ -10,9 +10,9 @@ async function getData() {
     const trElement = $('<tr></tr>');
 
     const htmlTitle = `
-    <th>Tên sinh viên</th>
-    <th>Lớp</th>
-    <th>Chức năng</th>
+        <th>Tên sinh viên</th>
+        <th>Lớp</th>
+        <th>Chức năng</th>
     `;
 
     trElement.html(htmlTitle);
