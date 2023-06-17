@@ -1,4 +1,4 @@
-const students = [
+var students = [
     {
         id: '1',
         name: 'Nguyen Van Teo',
@@ -26,7 +26,7 @@ const students = [
     }
 ]
 
-const classList = [
+var classList = [
     {
         id: '1',
         name: "CNTT"
@@ -58,12 +58,12 @@ function generateUuid() {
     });
 }
 
-const listStudents = [];
+var listStudents = [];
 students.forEach(function (student) {
-    const classInfo = classList.find(function (el) {
+    var classInfo = classList.find(function (el) {
         return el.id === student.classId;
     })
-    const newSt = {
+    var newSt = {
         id: student.id,
         studentName: student.name,
         classId: classInfo.id,
@@ -72,12 +72,12 @@ students.forEach(function (student) {
     listStudents.push(newSt);
 })
 
-const tbElement = $('#tbl');
+var tbElement = $('#tbl');
 
 // Tiêu đề
-const trElement = $('<tr></tr>');
+var trElement = $('<tr></tr>');
 
-const htmlTitle = `
+var htmlTitle = `
         <th>Tên sinh viên</th>
         <th>Lớp</th>
         <th>Chức năng</th>
@@ -90,7 +90,7 @@ function renderStudent(student) {
     var trElement = $('<tr></tr>');
     $(trElement).attr('class', 'student-' + student.id);
 
-    const htmlContent = `
+    var htmlContent = `
             <td>${student.studentName}</td>
             <td>${student.className}</td>
             <td>
@@ -109,7 +109,7 @@ listStudents.forEach(function (student) {
     tbElement.append(trElement);
 })
 
-const classElement = $('#class');
+var classElement = $('#class');
 
 var htmlOptions = `<option value=''>-- Chọn lớp --</option>`;
 classList.forEach(function (classInfo) {
@@ -121,8 +121,8 @@ classElement.html(htmlOptions);
 var addBtnElement = $('#create');
 var edBtnElement = $("#update");
 
-const stName = $('input[name="name"]');
-const classInfo = $('select[name="class"]');
+var stName = $('input[name="name"]');
+var classInfo = $('select[name="class"]');
 
 function handleBlurInput(input) {
     var errorElement = input.parent().children()[3];
@@ -150,7 +150,7 @@ addBtnElement.click(function (e) {
         check = false;
     }
     if (check) {
-        const newSt = {
+        var newSt = {
             id: generateUuid(),
             studentName: stName.val(),
             classId: classInfo.val(),
@@ -161,7 +161,7 @@ addBtnElement.click(function (e) {
 
         stName.val('');
         classInfo.val('');
-        const trElement = renderStudent(newSt);
+        var trElement = renderStudent(newSt);
 
         tbElement.append(trElement);
     }
@@ -199,7 +199,7 @@ function onUpdate(id) {
 
 edBtnElement.click(function (e) {
     e.preventDefault();
-    const edSt = {
+    var edSt = {
         id: edId,
         studentName: stName.val(),
         classId: classInfo.val(),
@@ -211,7 +211,7 @@ edBtnElement.click(function (e) {
     })
     listStudents.splice(idx, 1, edSt);
 
-    const trElement = renderStudent(edSt);
+    var trElement = renderStudent(edSt);
 
     var editElement = $('.student-' + edId);
     if (editElement) {
