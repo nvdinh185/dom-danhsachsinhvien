@@ -1,4 +1,4 @@
-const students = [
+var students = [
     {
         id: '1',
         name: 'Nguyen Van Teo',
@@ -26,7 +26,7 @@ const students = [
     }
 ]
 
-const classList = [
+var classList = [
     {
         id: '1',
         name: "CNTT"
@@ -57,19 +57,19 @@ function getClassNameById(id) {
     }).name;
 }
 
-const classIds = students.map(function (student) {
+var classIds = students.map(function (student) {
     return student.classId;
 })
 
-const classByIds = getClassByIds(classIds);
+var classByIds = getClassByIds(classIds);
 // console.log(classByIds);
 
-const listStudents = [];
+var listStudents = [];
 students.forEach(function (student) {
-    const classInfo = classByIds.find(function (el) {
+    var classInfo = classByIds.find(function (el) {
         return el.id === student.classId;
     })
-    const newSt = {
+    var newSt = {
         id: student.id,
         studentName: student.name,
         classId: classInfo.id,
@@ -78,12 +78,12 @@ students.forEach(function (student) {
     listStudents.push(newSt);
 })
 
-const tbElement = document.querySelector('#tbl');
+var tbElement = document.querySelector('#tbl');
 
 // Tiêu đề
-const theadElement = document.createElement('thead');
+var theadElement = document.createElement('thead');
 
-const htmlTitle = `
+var htmlTitle = `
         <tr>
             <th>Tên sinh viên</th>
             <th>Lớp</th>
@@ -98,7 +98,7 @@ function renderStudent(student) {
     var trElement = document.createElement('tr');
     trElement.setAttribute('class', 'student-' + student.id);
 
-    const htmlContent = `
+    var htmlContent = `
             <td>${student.studentName}</td>
             <td>${student.className}</td>
             <td>
@@ -112,14 +112,14 @@ function renderStudent(student) {
 }
 
 // Nội dung
-const tbodyElement = document.createElement('tbody');
+var tbodyElement = document.createElement('tbody');
 listStudents.forEach(function (student) {
     var trElement = renderStudent(student);
     tbodyElement.appendChild(trElement);
 })
 tbElement.appendChild(tbodyElement);
 
-const classElement = document.querySelector('#class');
+var classElement = document.querySelector('#class');
 
 var htmlOptions = `<option value=''>-- Chọn lớp --</option>`;
 classList.forEach(function (classInfo) {
@@ -133,8 +133,8 @@ classElement.innerHTML = htmlOptions;
 var addBtnElement = document.getElementById('create');
 var editBtnElement = document.getElementById('update');
 
-const stName = document.querySelector('input[name="name"]');
-const classInfo = document.querySelector('select[name="class"]');
+var stName = document.querySelector('input[name="name"]');
+var classInfo = document.querySelector('select[name="class"]');
 
 function generateUuid() {
     return 'xxxx-xxxx-xxx-xxxx'.replace(/[x]/g, function (c) {
@@ -155,7 +155,6 @@ function handleBlurInput(input) {
     }
 }
 
-
 handleBlurInput(stName);
 handleBlurInput(classInfo);
 
@@ -171,7 +170,7 @@ addBtnElement.onclick = function (e) {
     }
     if (check) {
 
-        const newSt = {
+        var newSt = {
             id: generateUuid(),
             studentName: stName.value,
             classId: Number(classInfo.value),
@@ -182,7 +181,7 @@ addBtnElement.onclick = function (e) {
 
         stName.value = '';
         classInfo.value = '';
-        const tr3Element = renderStudent(newSt);
+        var tr3Element = renderStudent(newSt);
 
         tbodyElement.appendChild(tr3Element);
     }
@@ -221,10 +220,10 @@ function onUpdate(id) {
 
 editBtnElement.onclick = function (e) {
     e.preventDefault();
-    const edSt = {
+    var edSt = {
         id: idEd,
         studentName: stName.value,
-        classId: Number(classInfo.value),
+        classId: classInfo.value,
         className: getClassNameById(classInfo.value)
     }
 
@@ -233,7 +232,7 @@ editBtnElement.onclick = function (e) {
     })
     listStudents.splice(idx, 1, edSt);
 
-    const trElement = renderStudent(edSt);
+    var trElement = renderStudent(edSt);
     var htmls = trElement.outerHTML;// chuyển từ element sang string
 
     var editElement = document.querySelector('.student-' + idEd);
