@@ -1,15 +1,15 @@
-const studentsApi = "http://localhost:3000/student";
-const classApi = "http://localhost:3000/class";
-const tbElement = $('#tbl');
+var studentsApi = "http://localhost:3000/student";
+var classApi = "http://localhost:3000/class";
+var tbElement = $('#tbl');
 
 async function getData() {
     var listStudents = await axios.get(studentsApi);
     listStudents = listStudents.data;
 
     // Tiêu đề
-    const trElement = $('<tr></tr>');
+    var trElement = $('<tr></tr>');
 
-    const htmlTitle = `
+    var htmlTitle = `
         <th>Tên sinh viên</th>
         <th>Lớp</th>
         <th>Chức năng</th>
@@ -27,7 +27,7 @@ async function getData() {
     // display class in select option
     var classList = await axios.get(classApi);
     classList = classList.data;
-    const classElement = $('#class');
+    var classElement = $('#class');
 
     var htmlOptions = `<option value=''>-- Chọn lớp --</option>`;
     classList.forEach(function (classInfo) {
@@ -43,7 +43,7 @@ function renderStudent(student) {
     var trElement = $('<tr></tr>');
     $(trElement).attr('class', 'student-' + student.id);
 
-    const htmlContent = `
+    var htmlContent = `
             <td>${student.name}</td>
             <td>${student.className}</td>
             <td>
@@ -59,8 +59,8 @@ function renderStudent(student) {
 var addBtnElement = $('#create');
 var edBtnElement = $("#update");
 
-const stName = $('input[name="name"]');
-const classInfo = $('select[name="class"]');
+var stName = $('input[name="name"]');
+var classInfo = $('select[name="class"]');
 
 function handleBlurInput(input) {
     var errorElement = input.parent().children()[3];
@@ -88,7 +88,7 @@ addBtnElement.click(async function (e) {
         check = false;
     }
     if (check) {
-        const newSt = {
+        var newSt = {
             id: generateUuid(),
             name: stName.val(),
             classId: classInfo.val()
@@ -150,7 +150,7 @@ async function onUpdate(id) {
 
 edBtnElement.click(async function (e) {
     e.preventDefault();
-    const edSt = {
+    var edSt = {
         id: edId,
         name: stName.val(),
         classId: classInfo.val()
