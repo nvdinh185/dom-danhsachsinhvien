@@ -45,28 +45,15 @@ var classList = [
     }
 ]
 
-function getClassByIds(classIds) {
-    return classList.filter(function (el) {
-        return classIds.includes(el.id);
-    })
-}
-
 function getClassNameById(id) {
     return classList.find(function (el) {
         return el.id === id;
     }).name;
 }
 
-var classIds = students.map(function (student) {
-    return student.classId;
-})
-
-var classByIds = getClassByIds(classIds);
-// console.log(classByIds);
-
 var listStudents = [];
 students.forEach(function (student) {
-    var classInfo = classByIds.find(function (el) {
+    var classInfo = classList.find(function (el) {
         return el.id === student.classId;
     })
     var newSt = {
