@@ -2,7 +2,7 @@ var studentsApi = "http://localhost:3000/student";
 var classApi = "http://localhost:3000/class";
 var tbElement = $('#tbl');
 
-async function getData() {
+async function displayStudents() {
     var listStudents = await axios.get(studentsApi);
     listStudents = listStudents.data;
 
@@ -16,7 +16,7 @@ async function getData() {
     `;
 
     trElement.html(htmlTitle);
-    tbElement.html(trElement);
+    tbElement.append(trElement);
 
     // Nội dung
     listStudents.forEach(function (student) {
@@ -35,26 +35,26 @@ async function getData() {
     })
 
     classElement.html(htmlOptions);
+
+    function renderStudent(student) {
+        var trElement = $('<tr></tr>');
+        $(trElement).attr('class', 'student-' + student.id);
+
+        var htmlContent = `
+                <td>${student.name}</td>
+                <td>${student.className}</td>
+                <td>
+                    <button onclick="onUpdate('${student.id}')">Sửa</button>
+                    <button onclick="onDelete('${student.id}')">Xóa</button>
+                </td>
+            `;
+
+        trElement.html(htmlContent);
+        return trElement;
+    }
 }
 
-getData();
-
-function renderStudent(student) {
-    var trElement = $('<tr></tr>');
-    $(trElement).attr('class', 'student-' + student.id);
-
-    var htmlContent = `
-            <td>${student.name}</td>
-            <td>${student.className}</td>
-            <td>
-                <button onclick="onUpdate('${student.id}')">Sửa</button>
-                <button onclick="onDelete('${student.id}')">Xóa</button>
-            </td>
-        `;
-
-    trElement.html(htmlContent);
-    return trElement;
-}
+displayStudents();
 
 var addBtnElement = $('#create');
 var edBtnElement = $("#update");
