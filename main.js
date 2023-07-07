@@ -82,12 +82,12 @@ function render(array) {
     tbElement.innerHTML = htmlTitle;
 
     // Nội dung
-    var htmlBody = '<body>';
+    var htmlBody = '<tbody>';
     for (const student of array) {
         var trElement = renderStudent(student);
         htmlBody += trElement;
     }
-    htmlBody += '</body>';
+    htmlBody += '</tbody>';
     tbElement.innerHTML += htmlBody;
 }
 
