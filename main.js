@@ -65,46 +65,49 @@ students.forEach(function (student) {
     listStudents.push(newSt);
 })
 
-var tbElement = document.querySelector('#tbl');
+function render(array) {
+    var tbElement = document.querySelector('#tbl');
+    tbElement.innerHTML = '';
 
-// Tiêu đề
-var theadElement = document.createElement('thead');
-
-var htmlTitle = `
-        <tr>
-            <th>Tên sinh viên</th>
-            <th>Lớp</th>
-            <th>Chức năng</th>
-        </tr>
-    `;
-
-theadElement.innerHTML = htmlTitle;
-tbElement.appendChild(theadElement);
-
-function renderStudent(student) {
-    var trElement = document.createElement('tr');
-    trElement.setAttribute('class', 'student-' + student.id);
-
-    var htmlContent = `
-            <td>${student.studentName}</td>
-            <td>${student.className}</td>
-            <td>
-                <button onclick="onUpdate('${student.id}')">Sửa</button>
-                <button onclick="onDelete('${student.id}')">Xóa</button>
-            </td>
+    // Tiêu đề
+    var htmlTitle = `
+        <thead>
+            <tr>
+                <th>Tên sinh viên</th>
+                <th>Lớp</th>
+                <th>Chức năng</th>
+            </tr>
+        </thead>
         `;
 
-    trElement.innerHTML = htmlContent;
-    return trElement;
+    tbElement.innerHTML = htmlTitle;
+
+    // Nội dung
+    var htmlBody = '<body>';
+    for (const student of array) {
+        var trElement = renderStudent(student);
+        htmlBody += trElement;
+    }
+    htmlBody += '</body>';
+    tbElement.innerHTML += htmlBody;
 }
 
-// Nội dung
-var tbodyElement = document.createElement('tbody');
-listStudents.forEach(function (student) {
-    var trElement = renderStudent(student);
-    tbodyElement.appendChild(trElement);
-})
-tbElement.appendChild(tbodyElement);
+render(listStudents);
+
+function renderStudent(student) {
+    var htmls = `
+        <tr>
+                <td>${student.studentName}</td>
+                <td>${student.className}</td>
+                <td>
+                    <button onclick="onUpdate('${student.id}')">Sửa</button>
+                    <button onclick="onDelete('${student.id}')">Xóa</button>
+                </td>
+        </tr>
+        `;
+
+    return htmls;
+}
 
 var classElement = document.querySelector('#class');
 
@@ -149,10 +152,10 @@ addBtnElement.onclick = function (e) {
     e.preventDefault();
 
     var check = true;
-    if (validation(stName)) {
+    if (isRequired(stName)) {
         check = false;
     }
-    if (validation(classInfo)) {
+    if (isRequired(classInfo)) {
         check = false;
     }
     if (check) {
@@ -165,22 +168,16 @@ addBtnElement.onclick = function (e) {
         }
 
         listStudents.push(newSt);
+        render(listStudents);
 
         stName.value = '';
         classInfo.value = '';
-        var tr3Element = renderStudent(newSt);
-
-        tbodyElement.appendChild(tr3Element);
     }
 
-    function validation(input) {
+    function isRequired(input) {
         var errorElement = input.parentElement.querySelector('.form-message');
         if (input.value === '') {
-            Object.assign(errorElement.style, {
-                display: 'block',
-                color: 'red',
-                fontStyle: 'italic'
-            })
+            errorElement.setAttribute('style', 'display: block; color: red; font-style: italic;');
             errorElement.innerText = 'Yêu cầu nhập!';
             return true;
         } else {
@@ -218,14 +215,8 @@ editBtnElement.onclick = function (e) {
         return student.id === idEd;
     })
     listStudents.splice(idx, 1, edSt);
+    render(listStudents);
 
-    var trElement = renderStudent(edSt);
-    var htmls = trElement.outerHTML;// chuyển từ element sang string
-
-    var editElement = document.querySelector('.student-' + idEd);
-    if (editElement) {
-        editElement.outerHTML = htmls;
-    }
     addBtnElement.setAttribute('style', 'display: block');
     editBtnElement.setAttribute('style', 'display: none');
     stName.value = '';
@@ -241,9 +232,7 @@ function onDelete(id) {
         if (idx !== -1) {
             listStudents.splice(idx, 1);
         }
-        var deleteElement = document.querySelector('.student-' + id);
-        if (deleteElement) {
-            deleteElement.remove();
-        }
+
+        render(listStudents);
     }
 }
