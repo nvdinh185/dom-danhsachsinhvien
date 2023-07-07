@@ -67,7 +67,6 @@ students.forEach(function (student) {
 
 function render(array) {
     var tbElement = document.querySelector('#tbl');
-    tbElement.innerHTML = '';
 
     // Tiêu đề
     var htmlTitle = `
