@@ -143,10 +143,10 @@ addBtnElement.click(function (e) {
     e.preventDefault();
 
     var check = true;
-    if (validation(stName)) {
+    if (isRequired(stName)) {
         check = false;
     }
-    if (validation(classInfo)) {
+    if (isRequired(classInfo)) {
         check = false;
     }
     if (check) {
@@ -165,7 +165,7 @@ addBtnElement.click(function (e) {
 
         tbElement.append(trElement);
     }
-    function validation(input) {
+    function isRequired(input) {
         var errorElement = input.parent().children()[3];
         if (input.val() === '') {
             Object.assign(errorElement.style, {
