@@ -51,6 +51,33 @@ function getClassNameById(id) {
     }).name;
 }
 
+function renderHTML(arr, tbEl) {
+
+    // Tiêu đề
+    var htmlTitle = '';
+    for (const key in arr[0]) {
+        htmlTitle += `<th>${key}</th>`;
+    }
+    htmlTitle += `<th colspan=2>Chức năng</th>`;
+
+    tbEl.innerHTML = '<thead><tr>' + htmlTitle + '</tr></thead>';
+
+    // Nội dung
+    var htmlBody = '<tbody>';
+    arr.forEach(function (el) {
+        var htmlContent = '<tr>';
+        for (const key in el) {
+            htmlContent += `<td>${el[key]}</td>`;
+        }
+        htmlContent += `<td><button onclick=editSt('${el.id}')>Sửa</button></td>`;
+        htmlContent += `<td><button onclick=deleteSt('${el.id}')>Xóa</button></td>`;
+        htmlContent += '</tr>';
+        htmlBody += htmlContent;
+    })
+    htmlBody += '</tbody>';
+    tbEl.innerHTML += htmlBody;
+}
+
 var listStudents = [];
 students.forEach(function (student) {
     var classInfo = classList.find(function (el) {
@@ -65,48 +92,9 @@ students.forEach(function (student) {
     listStudents.push(newSt);
 })
 
-function render(array) {
-    var tbElement = document.querySelector('#tbl');
+const tbElement = document.querySelector('#tbl');
 
-    // Tiêu đề
-    var htmlTitle = `
-        <thead>
-            <tr>
-                <th>Tên sinh viên</th>
-                <th>Lớp</th>
-                <th>Chức năng</th>
-            </tr>
-        </thead>
-        `;
-
-    tbElement.innerHTML = htmlTitle;
-
-    // Nội dung
-    var htmlBody = '<tbody>';
-    for (const student of array) {
-        var trElement = renderStudent(student);
-        htmlBody += trElement;
-    }
-    htmlBody += '</tbody>';
-    tbElement.innerHTML += htmlBody;
-}
-
-render(listStudents);
-
-function renderStudent(student) {
-    var htmls = `
-        <tr>
-                <td>${student.studentName}</td>
-                <td>${student.className}</td>
-                <td>
-                    <button onclick="onUpdate('${student.id}')">Sửa</button>
-                    <button onclick="onDelete('${student.id}')">Xóa</button>
-                </td>
-        </tr>
-        `;
-
-    return htmls;
-}
+renderHTML(listStudents, tbElement);
 
 var classElement = document.querySelector('#class');
 
@@ -172,7 +160,7 @@ addBtnElement.onclick = function (e) {
         }
 
         listStudents.push(newSt);
-        render(listStudents);
+        renderHTML(listStudents, tbElement);
 
         stName.value = '';
         classInfo.value = '';
@@ -191,16 +179,15 @@ addBtnElement.onclick = function (e) {
     }
 }
 
-var idEd;
-function onUpdate(id) {
-    idEd = id;
-    // Tìm sinh viên muốn sửa
-    var student = listStudents.find(function (st) {
-        return st.id === idEd;
-    })
+var edId;
+function editSt(id) {
+    edId = id;
 
-    stName.value = student.studentName;
-    classInfo.value = student.classId;
+    var idx = listStudents.findIndex(function (el) {
+        return el.id == id;
+    })
+    stName.value = listStudents[idx].studentName;
+    classInfo.value = listStudents[idx].classId;
 
     addBtnElement.setAttribute('style', 'display: none');
     editBtnElement.setAttribute('style', 'display: block');
@@ -209,17 +196,17 @@ function onUpdate(id) {
 editBtnElement.onclick = function (e) {
     e.preventDefault();
     var edSt = {
-        id: idEd,
+        id: edId,
         studentName: stName.value,
         classId: classInfo.value,
         className: getClassNameById(classInfo.value)
     }
 
     var idx = listStudents.findIndex(function (student) {
-        return student.id === idEd;
+        return student.id === edId;
     })
     listStudents.splice(idx, 1, edSt);
-    render(listStudents);
+    renderHTML(listStudents, tbElement);
 
     addBtnElement.setAttribute('style', 'display: block');
     editBtnElement.setAttribute('style', 'display: none');
@@ -227,16 +214,13 @@ editBtnElement.onclick = function (e) {
     classInfo.value = '';
 }
 
-function onDelete(id) {
+function deleteSt(id) {
     if (confirm("Bạn có chắc muốn xóa?")) {
-        var idx = listStudents.findIndex(function (student) {
-            return student.id === id;
+        var idx = listStudents.findIndex(function (el) {
+            return el.id == id;
         })
 
-        if (idx !== -1) {
-            listStudents.splice(idx, 1);
-        }
-
-        render(listStudents);
+        listStudents.splice(idx, 1);
+        renderHTML(listStudents, tbElement);
     }
 }
