@@ -132,14 +132,17 @@ function generateUuid() {
     });
 }
 
+/**
+ * Hàm để xử lý khi blur hoặc nhập vào ô input
+ * @param {*} input 
+ */
 function handleBlurInput(input) {
     var errorElement = input.parentElement.querySelector('.form-message');
     input.onblur = function () {
         if (input.value.trim() === '') {
-            errorElement.setAttribute('style', 'display: block; color: red; font-style: italic;');
+            errorElement.setAttribute('style', 'color: red; font-style: italic;');
             errorElement.innerText = 'Yêu cầu nhập!';
-        } else {
-            errorElement.setAttribute('style', 'display: none;');
+            input.classList.add('invalid');
         }
     }
 
@@ -181,12 +184,10 @@ addBtnElement.onclick = function (e) {
     function isRequired(input) {
         var errorElement = input.parentElement.querySelector('.form-message');
         if (input.value.trim() === '') {
-            errorElement.setAttribute('style', 'display: block; color: red; font-style: italic;');
+            errorElement.setAttribute('style', 'color: red; font-style: italic;');
             errorElement.innerText = 'Yêu cầu nhập!';
+            input.classList.add('invalid');
             return true;
-        } else {
-            errorElement.setAttribute('style', 'display: none;');
-            return false;
         }
     }
 }
