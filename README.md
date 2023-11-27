@@ -52,4 +52,4 @@ const classList = [
 - Hiển thị danh sách sinh viên theo dạng bảng như sau:
 - Thực hiện các công việc Thêm, Sửa, Xoá
 
-![alt text](image.jpg)
+![](image.jpg)
