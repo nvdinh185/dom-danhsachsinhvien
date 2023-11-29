@@ -93,14 +93,14 @@ render(listStudents);
 
 function renderStudent(student) {
     var htmls = `
-        <tr>
-                <td>${student.studentName}</td>
-                <td>${student.className}</td>
-                <td>
-                    <button onclick="onUpdate('${student.id}')">Sửa</button>
-                    <button onclick="onDelete('${student.id}')">Xóa</button>
-                </td>
-        </tr>
+            <tr>
+                    <td>${student.studentName}</td>
+                    <td>${student.className}</td>
+                    <td>
+                        <button onclick="onUpdate('${student.id}')">Sửa</button>
+                        <button onclick="onDelete('${student.id}')">Xóa</button>
+                    </td>
+            </tr>
         `;
 
     return htmls;
@@ -111,8 +111,8 @@ var classElement = $('#class');
 var htmlOptions = `<option value=''>-- Chọn lớp --</option>`;
 classList.forEach(function (classInfo) {
     htmlOptions += `
-            <option value='${classInfo.id}'>${classInfo.name}</option>
-        `;
+        <option value='${classInfo.id}'>${classInfo.name}</option>
+    `;
 })
 
 classElement.html(htmlOptions);
