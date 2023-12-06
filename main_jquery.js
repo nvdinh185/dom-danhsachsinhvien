@@ -46,9 +46,10 @@ var classList = [
 ]
 
 function getClassNameById(id) {
-    return classList.find(function (el) {
+    var classById = classList.find(function (el) {
         return el.id === id;
-    }).name;
+    })
+    return classById.name;
 }
 
 var listStudents = [];
