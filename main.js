@@ -104,15 +104,23 @@ var edBtnElement = $("#update");
 var stName = $('input[name="name"]');
 var classInfo = $('select[name="class"]');
 
+/**
+ * Hàm để xử lý khi blur hoặc nhập vào ô input
+ * @param {*} input 
+ */
 function handleBlurInput(input) {
     var errorElement = input.parent().children()[3];
     input.blur(function () {
-        if (input.val() === '') {
-            $(errorElement).attr('style', 'display: block; color: red; font-style: italic;');
+        if (input.val().trim() === '') {
+            $(errorElement).attr('style', 'color: red; font-style: italic;');
             $(errorElement).text('Yêu cầu nhập!');
-        } else {
-            $(errorElement).attr('style', 'display: none;');
+            input.addClass('invalid');
         }
+    })
+
+    input.on('input', function () {
+        $(errorElement).attr('style', 'display: none;');
+        input.removeClass('invalid');
     })
 }
 
@@ -146,17 +154,11 @@ addBtnElement.click(function (e) {
     }
     function isRequired(input) {
         var errorElement = input.parent().children()[3];
-        if (input.val() === '') {
-            Object.assign(errorElement.style, {
-                display: 'block',
-                color: 'red',
-                fontStyle: 'italic'
-            })
+        if (input.val().trim() === '') {
+            $(errorElement).attr('style', 'color: red; font-style: italic;');
             $(errorElement).text('Yêu cầu nhập!');
+            input.addClass('invalid');
             return true;
-        } else {
-            $(errorElement).attr('style', 'display: none;');
-            return false;
         }
     }
 })
