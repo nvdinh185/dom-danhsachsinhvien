@@ -2,27 +2,27 @@ var students = [
     {
         id: '1',
         name: 'Nguyen Van Teo',
-        classId: '1'
+        className: 'CNTT'
     },
     {
         id: '2',
         name: 'Nguyen Van Ti',
-        classId: '2'
+        className: 'DTVT'
     },
     {
         id: '3',
         name: 'Tran Van Tun',
-        classId: '3'
+        className: 'THXD'
     },
     {
         id: '4',
         name: 'Nguyen Thi Heo',
-        classId: '1'
+        className: 'CNTT'
     },
     {
         id: '5',
         name: 'Le Thi Be',
-        classId: '1'
+        className: 'CNTT'
     }
 ]
 
@@ -45,32 +45,12 @@ var classList = [
     }
 ]
 
-function getClassNameById(id) {
-    return classList.find(function (el) {
-        return el.id === id;
-    }).name;
-}
-
 function generateUuid() {
     return 'xxxx-xxxx-xxx-xxxx'.replace(/[x]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
 }
-
-var listStudents = [];
-students.forEach(function (student) {
-    var classInfo = classList.find(function (el) {
-        return el.id === student.classId;
-    })
-    var newSt = {
-        id: student.id,
-        studentName: student.name,
-        classId: classInfo.id,
-        className: classInfo.name
-    }
-    listStudents.push(newSt);
-})
 
 var tbElement = $('#tbl');
 
@@ -91,7 +71,7 @@ function renderStudent(student) {
     $(trElement).attr('class', 'student-' + student.id);
 
     var htmlContent = `
-            <td>${student.studentName}</td>
+            <td>${student.name}</td>
             <td>${student.className}</td>
             <td>
                 <button onclick="onUpdate('${student.id}')">Sửa</button>
@@ -104,7 +84,7 @@ function renderStudent(student) {
 }
 
 // Nội dung
-listStudents.forEach(function (student) {
+students.forEach(function (student) {
     var trElement = renderStudent(student);
     tbElement.append(trElement);
 })
@@ -113,7 +93,7 @@ var classElement = $('#class');
 
 var htmlOptions = `<option value=''>-- Chọn lớp --</option>`;
 classList.forEach(function (classInfo) {
-    htmlOptions += `<option value='${classInfo.id}'>${classInfo.name}</option>`;
+    htmlOptions += `<option value='${classInfo.name}'>${classInfo.name}</option>`;
 })
 
 classElement.html(htmlOptions);
@@ -152,12 +132,11 @@ addBtnElement.click(function (e) {
     if (check) {
         var newSt = {
             id: generateUuid(),
-            studentName: stName.val(),
-            classId: classInfo.val(),
-            className: getClassNameById(classInfo.val())
+            name: stName.val(),
+            className: classInfo.val()
         }
 
-        listStudents.push(newSt);
+        students.push(newSt);
 
         stName.val('');
         classInfo.val('');
@@ -186,12 +165,12 @@ var edId;
 function onUpdate(id) {
     edId = id;
     // Tìm sinh viên muốn sửa
-    var student = listStudents.find(function (st) {
+    var student = students.find(function (st) {
         return st.id === edId;
     })
 
-    stName.val(student.studentName);
-    classInfo.val(student.classId);
+    stName.val(student.name);
+    classInfo.val(student.className);
 
     $(edBtnElement).attr('style', 'display: block;');
     $(addBtnElement).attr('style', 'display: none');
@@ -201,15 +180,14 @@ edBtnElement.click(function (e) {
     e.preventDefault();
     var edSt = {
         id: edId,
-        studentName: stName.val(),
-        classId: classInfo.val(),
-        className: getClassNameById(classInfo.val())
+        name: stName.val(),
+        className: classInfo.val()
     }
 
-    var idx = listStudents.findIndex(function (student) {
+    var idx = students.findIndex(function (student) {
         return student.id === edId;
     })
-    listStudents.splice(idx, 1, edSt);
+    students.splice(idx, 1, edSt);
 
     var trElement = renderStudent(edSt);
 
@@ -225,12 +203,12 @@ edBtnElement.click(function (e) {
 
 function onDelete(id) {
     if (confirm("Bạn có chắc muốn xóa?")) {
-        var idx = listStudents.findIndex(function (student) {
+        var idx = students.findIndex(function (student) {
             return student.id === id;
         })
 
         if (idx !== -1) {
-            listStudents.splice(idx, 1);
+            students.splice(idx, 1);
             var deleteElement = $('.student-' + id);
             if (deleteElement) {
                 deleteElement.remove();
