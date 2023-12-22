@@ -5,27 +5,27 @@ const students = [
     {
         id: '1',
         name: 'Nguyen Van Teo',
-        classId: '1'
+        className: 'CNTT'
     },
     {
         id: '2',
         name: 'Nguyen Van Ti',
-        classId: '2'
+        className: 'DTVT'
     },
     {
         id: '3',
         name: 'Tran Van Tun',
-        classId: '3'
+        className: 'THXD'
     },
     {
         id: '4',
         name: 'Nguyen Thi Heo',
-        classId: '1'
+        className: 'CNTT'
     },
     {
         id: '5',
         name: 'Le Thi Be',
-        classId: '1'
+        className: 'CNTT'
     }
 ]
 
