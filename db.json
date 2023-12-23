@@ -1,0 +1,42 @@
+{
+  "students": [
+    {
+      "id": "2",
+      "name": "Nguyen Van Ti",
+      "className": "DTVT"
+    },
+    {
+      "id": "3",
+      "name": "Tran Van Tun",
+      "className": "THXD"
+    },
+    {
+      "id": "5",
+      "name": "Le Thi Be",
+      "className": "CNTT"
+    },
+    {
+      "id": "c402-3916-694-54f8",
+      "name": "Dinh Nguyen",
+      "className": "THXD"
+    }
+  ],
+  "classList": [
+    {
+      "id": "1",
+      "name": "CNTT"
+    },
+    {
+      "id": "2",
+      "name": "DTVT"
+    },
+    {
+      "id": "3",
+      "name": "THXD"
+    },
+    {
+      "id": "4",
+      "name": "XDDD"
+    }
+  ]
+}
