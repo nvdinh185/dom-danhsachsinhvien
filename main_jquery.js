@@ -2,27 +2,27 @@ var students = [
     {
         id: '1',
         name: 'Nguyen Van Teo',
-        classId: '1'
+        className: 'CNTT'
     },
     {
         id: '2',
         name: 'Nguyen Van Ti',
-        classId: '2'
+        className: 'DTVT'
     },
     {
         id: '3',
         name: 'Tran Van Tun',
-        classId: '3'
+        className: 'THXD'
     },
     {
         id: '4',
         name: 'Nguyen Thi Heo',
-        classId: '1'
+        className: 'CNTT'
     },
     {
         id: '5',
         name: 'Le Thi Be',
-        classId: '1'
+        className: 'CNTT'
     }
 ]
 
@@ -44,27 +44,6 @@ var classList = [
         name: 'XDDD'
     }
 ]
-
-function getClassNameById(id) {
-    var classById = classList.find(function (el) {
-        return el.id === id;
-    })
-    return classById.name;
-}
-
-var listStudents = [];
-students.forEach(function (student) {
-    var classInfo = classList.find(function (el) {
-        return el.id === student.classId;
-    })
-    var newSt = {
-        id: student.id,
-        studentName: student.name,
-        classId: classInfo.id,
-        className: classInfo.name
-    }
-    listStudents.push(newSt);
-})
 
 function render(array) {
     var tbElement = $('#tbl');
@@ -90,12 +69,12 @@ function render(array) {
     tbElement.html(htmls);
 }
 
-render(listStudents);
+render(students);
 
 function renderStudent(student) {
     var htmls = `
             <tr>
-                    <td>${student.studentName}</td>
+                    <td>${student.name}</td>
                     <td>${student.className}</td>
                     <td>
                         <button onclick="onUpdate('${student.id}')">Sửa</button>
@@ -112,7 +91,7 @@ var classElement = $('#class');
 var htmlOptions = `<option value=''>-- Chọn lớp --</option>`;
 classList.forEach(function (classInfo) {
     htmlOptions += `
-        <option value='${classInfo.id}'>${classInfo.name}</option>
+        <option value='${classInfo.name}'>${classInfo.name}</option>
     `;
 })
 
@@ -168,13 +147,12 @@ addBtnElement.on('click', function (e) {
 
         var newSt = {
             id: generateUuid(),
-            studentName: stName.val(),
-            classId: Number(classInfo.val()),
-            className: getClassNameById(classInfo.val())
+            name: stName.val(),
+            className: classInfo.val()
         }
 
-        listStudents.push(newSt);
-        render(listStudents);
+        students.push(newSt);
+        render(students);
 
         stName.val('');
         classInfo.val('');
@@ -195,12 +173,12 @@ var idEd;
 function onUpdate(id) {
     idEd = id;
     // Tìm sinh viên muốn sửa
-    var student = listStudents.find(function (st) {
+    var student = students.find(function (st) {
         return st.id === idEd;
     })
 
-    stName.val(student.studentName);
-    classInfo.val(student.classId);
+    stName.val(student.name);
+    classInfo.val(student.className);
 
     addBtnElement.attr('style', 'display: none');
     editBtnElement.attr('style', 'display: block');
@@ -210,16 +188,15 @@ editBtnElement.on('click', function (e) {
     e.preventDefault();
     var edSt = {
         id: idEd,
-        studentName: stName.val(),
-        classId: classInfo.val(),
-        className: getClassNameById(classInfo.val())
+        name: stName.val(),
+        className: classInfo.val()
     }
 
-    var idx = listStudents.findIndex(function (student) {
+    var idx = students.findIndex(function (student) {
         return student.id === idEd;
     })
-    listStudents.splice(idx, 1, edSt);
-    render(listStudents);
+    students.splice(idx, 1, edSt);
+    render(students);
 
     addBtnElement.attr('style', 'display: block');
     editBtnElement.attr('style', 'display: none');
@@ -229,14 +206,14 @@ editBtnElement.on('click', function (e) {
 
 function onDelete(id) {
     if (confirm("Bạn có chắc muốn xóa?")) {
-        var idx = listStudents.findIndex(function (student) {
+        var idx = students.findIndex(function (student) {
             return student.id === id;
         })
 
         if (idx !== -1) {
-            listStudents.splice(idx, 1);
+            students.splice(idx, 1);
         }
 
-        render(listStudents);
+        render(students);
     }
 }
