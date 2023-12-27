@@ -11,13 +11,13 @@ async function render() {
 
         // Tiêu đề
         var htmls = `
-        <thead>
-            <tr>
-                <th>Tên sinh viên</th>
-                <th>Lớp</th>
-                <th>Chức năng</th>
-            </tr>
-        </thead>
+            <thead>
+                <tr>
+                    <th>Tên sinh viên</th>
+                    <th>Lớp</th>
+                    <th>Chức năng</th>
+                </tr>
+            </thead>
         `;
 
         // Nội dung
