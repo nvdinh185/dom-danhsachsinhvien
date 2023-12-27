@@ -74,7 +74,7 @@ function render(array) {
 render(students);
 
 function renderStudent(student) {
-    var htmls = `
+    return `
         <tr>
                 <td>${student.name}</td>
                 <td>${student.className}</td>
@@ -84,8 +84,6 @@ function renderStudent(student) {
                 </td>
         </tr>
         `;
-
-    return htmls;
 }
 
 var classElement = document.querySelector('#class');
